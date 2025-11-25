@@ -11,7 +11,10 @@ export class WorkersService {
         join(__dirname, '..', 'worker-files', 'math.worker'),
       );
 
-      worker.on('message', resolve);
+      worker.on('message', (data) => {
+        console.log(`Received data from worker(${worker.threadId}):`, data);
+        resolve(data);
+      });
       worker.on('error', reject);
       worker.on('exit', (code) => {
         if (code !== 0) {

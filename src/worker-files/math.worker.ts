@@ -10,5 +10,6 @@ export function heavyCalculation(n: number): number {
 
 parentPort?.on('message', (n: number) => {
   const result = heavyCalculation(n);
+  console.log(`Calculated result for ${n}: ${result}`);
   parentPort?.postMessage(result);
 });
