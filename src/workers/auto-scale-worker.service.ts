@@ -49,14 +49,14 @@ export class AutoScaleWorkerService implements OnModuleInit, OnModuleDestroy {
     this.idleWorkers.push(worker);
 
     console.log(
-      `Spawning worker ${this.workers.length + 1}, threadId: ${worker.threadId}`,
+      `⚙️ Spawning new worker #${this.workers.length}, threadId: ${worker.threadId}`,
     );
 
     // add listeners
     worker.on('message', (result: any) => {
       const task = worker.currentTask as Task;
       console.log(
-        `Worker ${worker.threadId} completed task with result:`,
+        `✅ Worker ${worker.threadId} completed task with result:`,
         result,
       );
       task.resolve(result);
@@ -81,7 +81,6 @@ export class AutoScaleWorkerService implements OnModuleInit, OnModuleDestroy {
       if (code !== 0) {
         console.error(`Worker ${worker.threadId} exited unexpectedly`);
         this.removeWorker(worker);
-        this.spawnWorker();
       }
     });
 
@@ -89,7 +88,7 @@ export class AutoScaleWorkerService implements OnModuleInit, OnModuleDestroy {
   }
 
   private removeWorker(worker: ScalableWorker) {
-    console.log(`Removing worker ${worker.threadId}`);
+    console.log(`🚮 Removing worker ${worker.threadId}`);
     worker.terminate();
     this.workers = this.workers.filter((w) => w !== worker);
     this.idleWorkers = this.idleWorkers.filter((w) => w !== worker);
@@ -119,7 +118,7 @@ export class AutoScaleWorkerService implements OnModuleInit, OnModuleDestroy {
       this.workers.length < this.MAX_WORKERS
     ) {
       console.log(
-        `Scaling up: Spawning new worker. Total workers: ${this.workers.length + 1}`,
+        `🆙 Scaling up: Spawning new worker. Total workers: ${this.workers.length + 1}`,
       );
       this.spawnWorker();
       return;
@@ -143,7 +142,7 @@ export class AutoScaleWorkerService implements OnModuleInit, OnModuleDestroy {
       }
 
       if (removedCount > 0) {
-        console.log(`Removed ${removedCount} idle workers.`);
+        console.log(`🗑️ Removed ${removedCount} idle workers.`);
       }
     }
   }
@@ -156,9 +155,9 @@ export class AutoScaleWorkerService implements OnModuleInit, OnModuleDestroy {
 
   private info() {
     console.log(
-      `Workers[total|idle|busy]: [${this.workers.length}|${this.idleWorkers.length}|${this.busyWorkers.length}], taskCount: ${this.taskQueue.length}`,
+      `👷 Workers[total|idle|busy]: [${this.workers.length}|${this.idleWorkers.length}|${this.busyWorkers.length}], 📝 TaskCount: ${this.taskQueue.length}`,
     );
-    console.log('-'.repeat(80));
+    console.log('-'.repeat(58));
   }
 
   runTask(data: any): Promise<any> {
