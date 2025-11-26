@@ -94,7 +94,7 @@ export class BaseWorkerPool {
     }
 
     // scale down idle workers beyond minWorkers after idleTimeout
-    if (this.workers.length > this.maxWorkers) {
+    if (this.workers.length > this.minWorkers) {
       const now = Date.now();
       for (const worker of this.idleWorkers) {
         const lastUsed = this.workerLastUsed.get(worker) ?? 0;
